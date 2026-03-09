@@ -34,13 +34,13 @@ const { GH_TOKEN, GIST_ID, USERNAME, DAYS } = process.env;
     try {
       for (let page = 0; page < pages; page++) {
         // https://docs.github.com/en/developers/webhooks-and-events/github-event-types#pushevent
+
+
         const pushEvents = (
           await api.fetch(
-            `/users/${username}/events?per_page=${perPage}&page=${page}`
+            `/users/${username}/received_events?per_page=${perPage}&page=${page}`
           )
-        ).filter(
-          ({ type, actor }) => type === "PushEvent" && actor.login === username
-        );
+        ).filter(event => event.type === "PushEvent");
 
         const recentPushEvents = pushEvents.filter(
           ({ created_at }) => new Date(created_at) > fromDate
